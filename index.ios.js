@@ -9,43 +9,100 @@ import {
 
 let currentCards;
 
-const allCards = [
-  '1 Red Empty Diam',
-  '2 Red Empty Diam',
-  '3 Red Empty Diam',
-  '1 Purp Empty Diam',
-  '2 Purp Empty Diam',
-  '3 Purp Empty Diam',
-  '1 Green Empty Diam',
-  '2 Green Empty Diam',
-  '3 Green Empty Diam',
-  '1 Red Empty Oval',
-  '2 Red Empty Oval',
-  '3 Red Empty Oval',
-  '1 Green Empty Oval',
-  '2 Green Empty Oval',
-  '3 Green Empty Oval',
-  '1 Blue Empty Oval',
-  '2 Blue Empty Oval',
-  '3 Blue Empty Oval',
-  '1 Red Empty Rect',
-  '2 Red Empty Rect',
-  '3 Red Empty Rect',
-  '1 Green Empty Rect',
-  '2 Green Empty Rect',
-  '3 Green Empty Rect',
-  '1 Blue Empty Rect',
-  '2 Blue Empty Rect',
-  '3 Blue Empty Rect'
+const allTheCards = [
+  {color: 'red', number: 1, fill: 'empty', shape: 'diamond', img: ''},
+  {color: 'red', number: 2, fill: 'empty', shape: 'diamond', img: ''},
+  {color: 'red', number: 3, fill: 'empty', shape: 'diamond', img: ''},
+  {color: 'red', number: 1, fill: 'shaded', shape: 'diamond', img: ''},
+  {color: 'red', number: 2, fill: 'shaded', shape: 'diamond', img: ''},
+  {color: 'red', number: 3, fill: 'shaded', shape: 'diamond', img: ''},
+  {color: 'red', number: 1, fill: 'full', shape: 'diamond', img: ''},
+  {color: 'red', number: 2, fill: 'full', shape: 'diamond', img: ''},
+  {color: 'red', number: 3, fill: 'full', shape: 'diamond', img: ''},
+  {color: 'green', number: 1, fill: 'empty', shape: 'diamond', img: ''},
+  {color: 'green', number: 2, fill: 'empty', shape: 'diamond', img: ''},
+  {color: 'green', number: 3, fill: 'empty', shape: 'diamond', img: ''},
+  {color: 'green', number: 1, fill: 'shaded', shape: 'diamond', img: ''},
+  {color: 'green', number: 2, fill: 'shaded', shape: 'diamond', img: ''},
+  {color: 'green', number: 3, fill: 'shaded', shape: 'diamond', img: ''},
+  {color: 'green', number: 1, fill: 'full', shape: 'diamond', img: ''},
+  {color: 'green', number: 2, fill: 'full', shape: 'diamond', img: ''},
+  {color: 'green', number: 3, fill: 'full', shape: 'diamond', img: ''},
+  {color: 'purple', number: 1, fill: 'empty', shape: 'diamond', img: ''},
+  {color: 'purple', number: 2, fill: 'empty', shape: 'diamond', img: ''},
+  {color: 'purple', number: 3, fill: 'empty', shape: 'diamond', img: ''},
+  {color: 'purple', number: 1, fill: 'shaded', shape: 'diamond', img: ''},
+  {color: 'purple', number: 2, fill: 'shaded', shape: 'diamond', img: ''},
+  {color: 'purple', number: 3, fill: 'shaded', shape: 'diamond', img: ''},
+  {color: 'purple', number: 1, fill: 'full', shape: 'diamond', img: ''},
+  {color: 'purple', number: 2, fill: 'full', shape: 'diamond', img: ''},
+  {color: 'purple', number: 3, fill: 'full', shape: 'diamond', img: ''},
+
+  {color: 'red', number: 1, fill: 'empty', shape: 'oval', img: ''},
+  {color: 'red', number: 2, fill: 'empty', shape: 'oval', img: ''},
+  {color: 'red', number: 3, fill: 'empty', shape: 'oval', img: ''},
+  {color: 'red', number: 1, fill: 'shaded', shape: 'oval', img: ''},
+  {color: 'red', number: 2, fill: 'shaded', shape: 'oval', img: ''},
+  {color: 'red', number: 3, fill: 'shaded', shape: 'oval', img: ''},
+  {color: 'red', number: 1, fill: 'full', shape: 'oval', img: ''},
+  {color: 'red', number: 2, fill: 'full', shape: 'oval', img: ''},
+  {color: 'red', number: 3, fill: 'full', shape: 'oval', img: ''},
+  {color: 'green', number: 1, fill: 'empty', shape: 'oval', img: ''},
+  {color: 'green', number: 2, fill: 'empty', shape: 'oval', img: ''},
+  {color: 'green', number: 3, fill: 'empty', shape: 'oval', img: ''},
+  {color: 'green', number: 1, fill: 'shaded', shape: 'oval', img: ''},
+  {color: 'green', number: 2, fill: 'shaded', shape: 'oval', img: ''},
+  {color: 'green', number: 3, fill: 'shaded', shape: 'oval', img: ''},
+  {color: 'green', number: 1, fill: 'full', shape: 'oval', img: ''},
+  {color: 'green', number: 2, fill: 'full', shape: 'oval', img: ''},
+  {color: 'green', number: 3, fill: 'full', shape: 'oval', img: ''},
+  {color: 'purple', number: 1, fill: 'empty', shape: 'oval', img: ''},
+  {color: 'purple', number: 2, fill: 'empty', shape: 'oval', img: ''},
+  {color: 'purple', number: 3, fill: 'empty', shape: 'oval', img: ''},
+  {color: 'purple', number: 1, fill: 'shaded', shape: 'oval', img: ''},
+  {color: 'purple', number: 2, fill: 'shaded', shape: 'oval', img: ''},
+  {color: 'purple', number: 3, fill: 'shaded', shape: 'oval', img: ''},
+  {color: 'purple', number: 1, fill: 'full', shape: 'oval', img: ''},
+  {color: 'purple', number: 2, fill: 'full', shape: 'oval', img: ''},
+  {color: 'purple', number: 3, fill: 'full', shape: 'oval', img: ''},
+
+  {color: 'red', number: 1, fill: 'empty', shape: 'rectangle', img: ''},
+  {color: 'red', number: 2, fill: 'empty', shape: 'rectangle', img: ''},
+  {color: 'red', number: 3, fill: 'empty', shape: 'rectangle', img: ''},
+  {color: 'red', number: 1, fill: 'shaded', shape: 'rectangle', img: ''},
+  {color: 'red', number: 2, fill: 'shaded', shape: 'rectangle', img: ''},
+  {color: 'red', number: 3, fill: 'shaded', shape: 'rectangle', img: ''},
+  {color: 'red', number: 1, fill: 'full', shape: 'rectangle', img: ''},
+  {color: 'red', number: 2, fill: 'full', shape: 'rectangle', img: ''},
+  {color: 'red', number: 3, fill: 'full', shape: 'rectangle', img: ''},
+  {color: 'green', number: 1, fill: 'empty', shape: 'rectangle', img: ''},
+  {color: 'green', number: 2, fill: 'empty', shape: 'rectangle', img: ''},
+  {color: 'green', number: 3, fill: 'empty', shape: 'rectangle', img: ''},
+  {color: 'green', number: 1, fill: 'shaded', shape: 'rectangle', img: ''},
+  {color: 'green', number: 2, fill: 'shaded', shape: 'rectangle', img: ''},
+  {color: 'green', number: 3, fill: 'shaded', shape: 'rectangle', img: ''},
+  {color: 'green', number: 1, fill: 'full', shape: 'rectangle', img: ''},
+  {color: 'green', number: 2, fill: 'full', shape: 'rectangle', img: ''},
+  {color: 'green', number: 3, fill: 'full', shape: 'rectangle', img: ''},
+  {color: 'purple', number: 1, fill: 'empty', shape: 'rectangle', img: ''},
+  {color: 'purple', number: 2, fill: 'empty', shape: 'rectangle', img: ''},
+  {color: 'purple', number: 3, fill: 'empty', shape: 'rectangle', img: ''},
+  {color: 'purple', number: 1, fill: 'shaded', shape: 'rectangle', img: ''},
+  {color: 'purple', number: 2, fill: 'shaded', shape: 'rectangle', img: ''},
+  {color: 'purple', number: 3, fill: 'shaded', shape: 'rectangle', img: ''},
+  {color: 'purple', number: 1, fill: 'full', shape: 'rectangle', img: ''},
+  {color: 'purple', number: 2, fill: 'full', shape: 'rectangle', img: ''},
+  {color: 'purple', number: 3, fill: 'full', shape: 'rectangle', img: ''}
 ];
 
 generateCards = () => {
-  allCards = shuffle(allCards);
+  allTheCards = shuffle(allTheCards);
   currentCards = [];
   while(currentCards.length < 12){
-    currentCards.push(allCards.pop());
+    currentCards.push(allTheCards.pop());
   }
 };
+
 
 shuffle = (array) => {
   var currentIndex = array.length, temporaryValue, randomIndex;
@@ -63,6 +120,10 @@ shuffle = (array) => {
   return array;
 };
 
+checkForSet = () => {
+
+};
+
 generateCards();
 
 class Button extends Component {
@@ -70,24 +131,26 @@ class Button extends Component {
     super(props);
     this.state = {
       color: 'green',
-      selected: false
+      selected: false,
+      backgroundColor: '#CCC'
     };
   }
 
   handlePress(){
     if(this.state.color === 'green'){
-      this.setState({color: 'red', selected: true});
+      this.setState({color: 'red', selected: true, backgroundColor: 'white'});
     } else {
-      this.setState({color: 'green', selected: false});
+      this.setState({color: 'green', selected: false, backgroundColor: '#CCC'});
     }
   }
 
   render() {
+    // add backgroundColor to styles.item immutably via object.assign
     return (
       <TouchableHighlight style={styles.item} onPress={() => this.handlePress()} underlayColor='white'>
         <Text
         style={{color: this.state.color, fontSize: 15}}>
-          {this.props.cardName}
+          {this.props.cardNumber} {this.props.cardColor} {this.props.cardFill} {this.props.cardShape}
         </Text>
       </TouchableHighlight>
     );
@@ -108,7 +171,7 @@ class SetProject extends Component {
         <View style={styles.container}>
           {currentCards.map((card) => {
             return (
-              <Button cardName={card}></Button>
+              <Button cardColor={card.color} cardNumber={card.number} cardFill={card.fill} cardShape={card.shape}></Button>
             )
           })}
         </View>
@@ -152,7 +215,6 @@ const styles = StyleSheet.create({
      flex: 1,
      justifyContent: 'center',
      alignItems: 'center',
-     backgroundColor: '#CCC',
      margin: 10,
      width: 100,
      height: 100,
