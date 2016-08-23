@@ -4,124 +4,49 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  ListView,
+  Image
 } from 'react-native';
+import _ from 'underscore';
+import Helpers from './theDirectory/helpers';
+import Cards from './theDirectory/allTheCards';
 
-let currentCards;
+let allTheCards = Cards.allTheCards;
+let selectedCards = [];
+let usedCards = [];
+let currentCards = [];
 
-const allTheCards = [
-  {color: 'red', number: 1, fill: 'empty', shape: 'diamond', img: ''},
-  {color: 'red', number: 2, fill: 'empty', shape: 'diamond', img: ''},
-  {color: 'red', number: 3, fill: 'empty', shape: 'diamond', img: ''},
-  {color: 'red', number: 1, fill: 'shaded', shape: 'diamond', img: ''},
-  {color: 'red', number: 2, fill: 'shaded', shape: 'diamond', img: ''},
-  {color: 'red', number: 3, fill: 'shaded', shape: 'diamond', img: ''},
-  {color: 'red', number: 1, fill: 'full', shape: 'diamond', img: ''},
-  {color: 'red', number: 2, fill: 'full', shape: 'diamond', img: ''},
-  {color: 'red', number: 3, fill: 'full', shape: 'diamond', img: ''},
-  {color: 'green', number: 1, fill: 'empty', shape: 'diamond', img: ''},
-  {color: 'green', number: 2, fill: 'empty', shape: 'diamond', img: ''},
-  {color: 'green', number: 3, fill: 'empty', shape: 'diamond', img: ''},
-  {color: 'green', number: 1, fill: 'shaded', shape: 'diamond', img: ''},
-  {color: 'green', number: 2, fill: 'shaded', shape: 'diamond', img: ''},
-  {color: 'green', number: 3, fill: 'shaded', shape: 'diamond', img: ''},
-  {color: 'green', number: 1, fill: 'full', shape: 'diamond', img: ''},
-  {color: 'green', number: 2, fill: 'full', shape: 'diamond', img: ''},
-  {color: 'green', number: 3, fill: 'full', shape: 'diamond', img: ''},
-  {color: 'purple', number: 1, fill: 'empty', shape: 'diamond', img: ''},
-  {color: 'purple', number: 2, fill: 'empty', shape: 'diamond', img: ''},
-  {color: 'purple', number: 3, fill: 'empty', shape: 'diamond', img: ''},
-  {color: 'purple', number: 1, fill: 'shaded', shape: 'diamond', img: ''},
-  {color: 'purple', number: 2, fill: 'shaded', shape: 'diamond', img: ''},
-  {color: 'purple', number: 3, fill: 'shaded', shape: 'diamond', img: ''},
-  {color: 'purple', number: 1, fill: 'full', shape: 'diamond', img: ''},
-  {color: 'purple', number: 2, fill: 'full', shape: 'diamond', img: ''},
-  {color: 'purple', number: 3, fill: 'full', shape: 'diamond', img: ''},
-
-  {color: 'red', number: 1, fill: 'empty', shape: 'oval', img: ''},
-  {color: 'red', number: 2, fill: 'empty', shape: 'oval', img: ''},
-  {color: 'red', number: 3, fill: 'empty', shape: 'oval', img: ''},
-  {color: 'red', number: 1, fill: 'shaded', shape: 'oval', img: ''},
-  {color: 'red', number: 2, fill: 'shaded', shape: 'oval', img: ''},
-  {color: 'red', number: 3, fill: 'shaded', shape: 'oval', img: ''},
-  {color: 'red', number: 1, fill: 'full', shape: 'oval', img: ''},
-  {color: 'red', number: 2, fill: 'full', shape: 'oval', img: ''},
-  {color: 'red', number: 3, fill: 'full', shape: 'oval', img: ''},
-  {color: 'green', number: 1, fill: 'empty', shape: 'oval', img: ''},
-  {color: 'green', number: 2, fill: 'empty', shape: 'oval', img: ''},
-  {color: 'green', number: 3, fill: 'empty', shape: 'oval', img: ''},
-  {color: 'green', number: 1, fill: 'shaded', shape: 'oval', img: ''},
-  {color: 'green', number: 2, fill: 'shaded', shape: 'oval', img: ''},
-  {color: 'green', number: 3, fill: 'shaded', shape: 'oval', img: ''},
-  {color: 'green', number: 1, fill: 'full', shape: 'oval', img: ''},
-  {color: 'green', number: 2, fill: 'full', shape: 'oval', img: ''},
-  {color: 'green', number: 3, fill: 'full', shape: 'oval', img: ''},
-  {color: 'purple', number: 1, fill: 'empty', shape: 'oval', img: ''},
-  {color: 'purple', number: 2, fill: 'empty', shape: 'oval', img: ''},
-  {color: 'purple', number: 3, fill: 'empty', shape: 'oval', img: ''},
-  {color: 'purple', number: 1, fill: 'shaded', shape: 'oval', img: ''},
-  {color: 'purple', number: 2, fill: 'shaded', shape: 'oval', img: ''},
-  {color: 'purple', number: 3, fill: 'shaded', shape: 'oval', img: ''},
-  {color: 'purple', number: 1, fill: 'full', shape: 'oval', img: ''},
-  {color: 'purple', number: 2, fill: 'full', shape: 'oval', img: ''},
-  {color: 'purple', number: 3, fill: 'full', shape: 'oval', img: ''},
-
-  {color: 'red', number: 1, fill: 'empty', shape: 'rectangle', img: ''},
-  {color: 'red', number: 2, fill: 'empty', shape: 'rectangle', img: ''},
-  {color: 'red', number: 3, fill: 'empty', shape: 'rectangle', img: ''},
-  {color: 'red', number: 1, fill: 'shaded', shape: 'rectangle', img: ''},
-  {color: 'red', number: 2, fill: 'shaded', shape: 'rectangle', img: ''},
-  {color: 'red', number: 3, fill: 'shaded', shape: 'rectangle', img: ''},
-  {color: 'red', number: 1, fill: 'full', shape: 'rectangle', img: ''},
-  {color: 'red', number: 2, fill: 'full', shape: 'rectangle', img: ''},
-  {color: 'red', number: 3, fill: 'full', shape: 'rectangle', img: ''},
-  {color: 'green', number: 1, fill: 'empty', shape: 'rectangle', img: ''},
-  {color: 'green', number: 2, fill: 'empty', shape: 'rectangle', img: ''},
-  {color: 'green', number: 3, fill: 'empty', shape: 'rectangle', img: ''},
-  {color: 'green', number: 1, fill: 'shaded', shape: 'rectangle', img: ''},
-  {color: 'green', number: 2, fill: 'shaded', shape: 'rectangle', img: ''},
-  {color: 'green', number: 3, fill: 'shaded', shape: 'rectangle', img: ''},
-  {color: 'green', number: 1, fill: 'full', shape: 'rectangle', img: ''},
-  {color: 'green', number: 2, fill: 'full', shape: 'rectangle', img: ''},
-  {color: 'green', number: 3, fill: 'full', shape: 'rectangle', img: ''},
-  {color: 'purple', number: 1, fill: 'empty', shape: 'rectangle', img: ''},
-  {color: 'purple', number: 2, fill: 'empty', shape: 'rectangle', img: ''},
-  {color: 'purple', number: 3, fill: 'empty', shape: 'rectangle', img: ''},
-  {color: 'purple', number: 1, fill: 'shaded', shape: 'rectangle', img: ''},
-  {color: 'purple', number: 2, fill: 'shaded', shape: 'rectangle', img: ''},
-  {color: 'purple', number: 3, fill: 'shaded', shape: 'rectangle', img: ''},
-  {color: 'purple', number: 1, fill: 'full', shape: 'rectangle', img: ''},
-  {color: 'purple', number: 2, fill: 'full', shape: 'rectangle', img: ''},
-  {color: 'purple', number: 3, fill: 'full', shape: 'rectangle', img: ''}
-];
+generateCards = Helpers.generateCards;
+shuffle = Helpers.shuffle;
+checkForSet = Helpers.checkForSet;
 
 generateCards = () => {
-  allTheCards = shuffle(allTheCards);
+  allTheCards = Helpers.shuffle(allTheCards);
   currentCards = [];
   while(currentCards.length < 12){
     currentCards.push(allTheCards.pop());
   }
 };
 
+handleFoundSet = () => {
+  currentCards = currentCards.filter(el => {
+    let shouldReturn = true;
+    selectedCards.forEach(card => {
+      if(card.id === el.id){
+        shouldReturn = false;
+      }
+    });
+    if(shouldReturn) return el;
+	});
 
-shuffle = (array) => {
-  var currentIndex = array.length, temporaryValue, randomIndex;
+  usedCards = usedCards.concat(selectedCards);
 
-  while (0 !== currentIndex) {
+  selectedCards = [];
 
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
+  for(let i = 0; i < 3; i++){
+    currentCards.push(allTheCards.pop());
   }
-
-  return array;
-};
-
-checkForSet = () => {
-
 };
 
 generateCards();
@@ -131,27 +56,16 @@ class Button extends Component {
     super(props);
     this.state = {
       color: 'green',
-      selected: false,
       backgroundColor: '#CCC'
     };
   }
 
-  handlePress(){
-    if(this.state.color === 'green'){
-      this.setState({color: 'red', selected: true, backgroundColor: 'white'});
-    } else {
-      this.setState({color: 'green', selected: false, backgroundColor: '#CCC'});
-    }
-  }
-
   render() {
-    // add backgroundColor to styles.item immutably via object.assign
     return (
-      <TouchableHighlight style={styles.item} onPress={() => this.handlePress()} underlayColor='white'>
-        <Text
-        style={{color: this.state.color, fontSize: 15}}>
-          {this.props.cardNumber} {this.props.cardColor} {this.props.cardFill} {this.props.cardShape}
-        </Text>
+      <TouchableHighlight style={styles.item} onPress={() => (this.props.handlePress.bind(this))(this.props.card)} underlayColor='white'>
+        <Image
+          source={this.props.card.img} resizeMode='center'
+        />
       </TouchableHighlight>
     );
   }
@@ -162,18 +76,39 @@ class SetProject extends Component {
     super(props);
   }
 
+  handlePress(card){
+    if(card.selectColor === 'green'){
+      card.selectColor = 'red';
+      selectedCards.push(card);
+    } else {
+      card.selectColor = 'green'
+      selectedCards = selectedCards.filter( el => el !== card);
+    }
+    if(selectedCards.length === 3 && Helpers.checkForSet(selectedCards)){
+      handleFoundSet(selectedCards);
+    }
+  }
+
+  doTheUpdate(){
+    this.forceUpdate()
+  }
+
   render() {
+    let cardsArray = currentCards.map((card) => {
+      return (
+        <Button card={card} handlePress={this.handlePress}></Button>
+      )
+    });
     return (
       <View style={styles.overarch}>
         <View style={styles.title}>
           <Text>Cards</Text>
         </View>
+        <TouchableHighlight onPress={this.doTheUpdate.bind(this)}>
+          <Text style={styles.welcome}>Submit Set</Text>
+        </TouchableHighlight>
         <View style={styles.container}>
-          {currentCards.map((card) => {
-            return (
-              <Button cardColor={card.color} cardNumber={card.number} cardFill={card.fill} cardShape={card.shape}></Button>
-            )
-          })}
+          {cardsArray}
         </View>
       </View>
     );
@@ -206,21 +141,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10,
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  item: {
+   flex: 1,
+   justifyContent: 'center',
+   alignItems: 'center',
+   margin: 10,
+   width: 100,
+   height: 100,
+   borderWidth: 1,
+   margin: 1
   },
-   item: {
-     flex: 1,
-     justifyContent: 'center',
-     alignItems: 'center',
-     margin: 10,
-     width: 100,
-     height: 100,
-     borderWidth: 1,
-     margin: 1
-   },
 });
 
 
