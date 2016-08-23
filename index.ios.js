@@ -12,10 +12,7 @@ import _ from 'underscore';
 import Helpers from './theDirectory/helpers';
 import Cards from './theDirectory/allTheCards';
 
-let allTheCards = Cards.allTheCards;
-let selectedCards = [];
-let usedCards = [];
-let currentCards = [];
+let allTheCards = Cards;
 
 generateCards = Helpers.generateCards;
 shuffle = Helpers.shuffle;
@@ -30,6 +27,7 @@ generateCards = () => {
 };
 
 handleFoundSet = () => {
+  console.log('before currentCards: ', currentCards)
   currentCards = currentCards.filter(el => {
     let shouldReturn = true;
     selectedCards.forEach(card => {
@@ -39,6 +37,8 @@ handleFoundSet = () => {
     });
     if(shouldReturn) return el;
 	});
+
+  console.log('after currentCards: ', currentCards)
 
   usedCards = usedCards.concat(selectedCards);
 
@@ -62,9 +62,9 @@ class Button extends Component {
 
   render() {
     return (
-      <TouchableHighlight style={styles.item} onPress={() => (this.props.handlePress.bind(this))(this.props.card)} underlayColor='white'>
+      <TouchableHighlight style={styles.item} onPress={() => (this.props.handlePress.bind(this))(this.props.card)}>
         <Image
-          source={this.props.card.img} resizeMode='center'
+          source={this.props.card.img} resizeMode='center' style={styles.image}
         />
       </TouchableHighlight>
     );
@@ -77,11 +77,11 @@ class SetProject extends Component {
   }
 
   handlePress(card){
-    if(card.selectColor === 'green'){
-      card.selectColor = 'red';
+    if(card.selected === false){
+      card.selected = true;
       selectedCards.push(card);
     } else {
-      card.selectColor = 'green'
+      card.selected = false;
       selectedCards = selectedCards.filter( el => el !== card);
     }
     if(selectedCards.length === 3 && Helpers.checkForSet(selectedCards)){
@@ -104,7 +104,7 @@ class SetProject extends Component {
         <View style={styles.title}>
           <Text>Cards</Text>
         </View>
-        <TouchableHighlight onPress={this.doTheUpdate.bind(this)}>
+        <TouchableHighlight onPress={this.doTheUpdate.bind(this)} style={styles.submit}>
           <Text style={styles.welcome}>Submit Set</Text>
         </TouchableHighlight>
         <View style={styles.container}>
@@ -119,6 +119,11 @@ const styles = StyleSheet.create({
   title: {
     flex: .2,
     justifyContent: 'center'
+  },
+  submit: {
+    flex: .2,
+    justifyContent: 'center',
+    marginBottom: 10
   },
   overarch: {
     flex: 1,
@@ -151,6 +156,10 @@ const styles = StyleSheet.create({
    borderWidth: 1,
    margin: 1
   },
+  image: {
+    width: 100,
+    height: 100
+  }
 });
 
 
