@@ -5,17 +5,16 @@ import {
   Text,
   View,
   TouchableHighlight,
-  ListView
+  ListView,
+  Image
 } from 'react-native';
 import _ from 'underscore';
 import Helpers from './theDirectory/helpers';
 import Cards from './theDirectory/allTheCards';
 
-// this is why I should store cards on state
 let allTheCards = Cards.allTheCards;
-let usedCards = Cards.usedCards;
-let selectedCards = Cards.selectedCards;
-let currentCards;
+let selectedCards = [];
+let usedCards = [];
 
 generateCards = Helpers.generateCards;
 shuffle = Helpers.shuffle;
@@ -30,8 +29,6 @@ generateCards = () => {
 };
 
 handleFoundSet = () => {
-  console.log('currentcards before: ', currentCards)
-
   currentCards = currentCards.filter(el => {
     let shouldReturn = true;
     selectedCards.forEach(card => {
@@ -42,8 +39,6 @@ handleFoundSet = () => {
     if(shouldReturn) return el;
 	});
 
-  currentCards = currentCards.map(card => {card.color = 'green'; return card;});
-
   usedCards = usedCards.concat(selectedCards);
 
   selectedCards = [];
@@ -51,29 +46,32 @@ handleFoundSet = () => {
   for(let i = 0; i < 3; i++){
     currentCards.push(allTheCards.pop());
   }
-
-  console.log('currentcards after: ', currentCards)
 };
 
 generateCards();
+
+// this was the button previously
+// <Text
+// style={{color: this.props.card.selectColor, fontSize: 15}}>
+//   {this.props.card.number} {this.props.card.color} {this.props.card.fill} {this.props.card.shape}
+// </Text>
 
 class Button extends Component {
   constructor(props) {
     super(props);
     this.state = {
       color: 'green',
-      selected: false,
       backgroundColor: '#CCC'
     };
   }
 
   render() {
+    console.log('this.props.card: ', this.props.card)
     return (
-      <TouchableHighlight style={styles.item} onPress={() => (this.props.handlePress.bind(this))()} underlayColor='white'>
-        <Text
-        style={{color: this.state.color, fontSize: 15}}>
-          {this.props.number} {this.props.color} {this.props.fill} {this.props.shape}
-        </Text>
+      <TouchableHighlight style={styles.item} onPress={() => (this.props.handlePress.bind(this))(this.props.card)} underlayColor='white'>
+        <Image
+          source={this.props.card.img}
+        /> // this shit is not working, need to manually require the mfer
       </TouchableHighlight>
     );
   }
@@ -82,22 +80,24 @@ class Button extends Component {
 class SetProject extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      selectedCards: [],
-    }
   }
 
-  handlePress(){
-    if(this.state.color === 'green'){
-      this.setState({color: 'red', selected: true, backgroundColor: 'white'});
-      selectedCards.push(this.props);
+  handlePress(card){
+    if(card.selectColor === 'green'){
+      card.selectColor = 'red';
+      selectedCards.push(card);
     } else {
-      this.setState({color: 'green', selected: false, backgroundColor: '#CCC'});
-      selectedCards = selectedCards.filter( el => el !== this.props);
+      // this.setState({color: 'green', backgroundColor: '#CCC'});
+      card.selectColor = 'green'
+      selectedCards = selectedCards.filter( el => el !== card);
     }
     if(selectedCards.length === 3 && Helpers.checkForSet(selectedCards)){
-      handleFoundSet();
+      console.log('ayyyyy')
+      handleFoundSet(selectedCards);
+      this.forceUpdate();
     }
+    this.forceUpdate();
+    console.log('selectedCards: ', selectedCards, Helpers.checkForSet(selectedCards))
   }
 
   doTheUpdate(){
@@ -116,7 +116,7 @@ class SetProject extends Component {
         <View style={styles.container}>
           {currentCards.map((card) => {
             return (
-              <Button selectColor={card.selectColor} color={card.color} number={card.number} fill={card.fill} shape={card.shape} id={card.id} handlePress={this.handlePress}></Button>
+              <Button card={card} handlePress={this.handlePress}></Button>
             )
           })}
         </View>
