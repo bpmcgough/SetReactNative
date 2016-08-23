@@ -105,6 +105,11 @@ class SetProject extends Component {
   }
 
   render() {
+    let cardsArr = currentCards.map((card) => {
+      return (
+        <Button selectColor={card.selectColor} color={card.color} number={card.number} fill={card.fill} shape={card.shape} id={card.id} handlePress={this.handlePress}></Button>
+      )
+    });
     return (
       <View style={styles.overarch}>
         <View style={styles.title}>
@@ -114,11 +119,7 @@ class SetProject extends Component {
           <Text style={styles.welcome}>Submit Set</Text>
         </TouchableHighlight>
         <View style={styles.container}>
-          {currentCards.map((card) => {
-            return (
-              <Button selectColor={card.selectColor} color={card.color} number={card.number} fill={card.fill} shape={card.shape} id={card.id} handlePress={this.handlePress}></Button>
-            )
-          })}
+          {cardsArr}
         </View>
       </View>
     );
