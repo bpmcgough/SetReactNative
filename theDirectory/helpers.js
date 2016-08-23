@@ -50,7 +50,8 @@ Helpers.handleFoundSet = () => {
   }
 };
 
-Helpers.checkForSet = () => {
+Helpers.checkForSet = (selectedCards) => {
+  console.log('1: ', checkShapes(selectedCards), '2: ', checkColors(selectedCards))
   if(!checkShapes(selectedCards) || !checkColors(selectedCards) || !checkNumbers(selectedCards) || !checkFill(selectedCards)){
     return false;
   }

@@ -5,17 +5,17 @@ import {
   Text,
   View,
   TouchableHighlight,
-  ListView
+  ListView,
+  Image
 } from 'react-native';
 import _ from 'underscore';
 import Helpers from './theDirectory/helpers';
 import Cards from './theDirectory/allTheCards';
 
-// this is why I should store cards on state
 let allTheCards = Cards.allTheCards;
-let usedCards = Cards.usedCards;
-let selectedCards = Cards.selectedCards;
-let currentCards;
+let selectedCards = [];
+let usedCards = [];
+let currentCards = [];
 
 generateCards = Helpers.generateCards;
 shuffle = Helpers.shuffle;
@@ -30,8 +30,6 @@ generateCards = () => {
 };
 
 handleFoundSet = () => {
-  console.log('currentcards before: ', currentCards)
-
   currentCards = currentCards.filter(el => {
     let shouldReturn = true;
     selectedCards.forEach(card => {
@@ -42,8 +40,6 @@ handleFoundSet = () => {
     if(shouldReturn) return el;
 	});
 
-  currentCards = currentCards.map(card => {card.color = 'green'; return card;});
-
   usedCards = usedCards.concat(selectedCards);
 
   selectedCards = [];
@@ -51,8 +47,6 @@ handleFoundSet = () => {
   for(let i = 0; i < 3; i++){
     currentCards.push(allTheCards.pop());
   }
-
-  console.log('currentcards after: ', currentCards)
 };
 
 generateCards();
@@ -62,18 +56,16 @@ class Button extends Component {
     super(props);
     this.state = {
       color: 'green',
-      selected: false,
       backgroundColor: '#CCC'
     };
   }
 
   render() {
     return (
-      <TouchableHighlight style={styles.item} onPress={() => (this.props.handlePress.bind(this))()} underlayColor='white'>
-        <Text
-        style={{color: this.state.color, fontSize: 15}}>
-          {this.props.number} {this.props.color} {this.props.fill} {this.props.shape}
-        </Text>
+      <TouchableHighlight style={styles.item} onPress={() => (this.props.handlePress.bind(this))(this.props.card)} underlayColor='white'>
+        <Image
+          source={this.props.card.img} resizeMode='center'
+        />
       </TouchableHighlight>
     );
   }
@@ -82,21 +74,18 @@ class Button extends Component {
 class SetProject extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      selectedCards: [],
-    }
   }
 
-  handlePress(){
-    if(this.state.color === 'green'){
-      this.setState({color: 'red', selected: true, backgroundColor: 'white'});
-      selectedCards.push(this.props);
+  handlePress(card){
+    if(card.selectColor === 'green'){
+      card.selectColor = 'red';
+      selectedCards.push(card);
     } else {
-      this.setState({color: 'green', selected: false, backgroundColor: '#CCC'});
-      selectedCards = selectedCards.filter( el => el !== this.props);
+      card.selectColor = 'green'
+      selectedCards = selectedCards.filter( el => el !== card);
     }
     if(selectedCards.length === 3 && Helpers.checkForSet(selectedCards)){
-      handleFoundSet();
+      handleFoundSet(selectedCards);
     }
   }
 
@@ -105,9 +94,9 @@ class SetProject extends Component {
   }
 
   render() {
-    let cardsArr = currentCards.map((card) => {
+    let cardsArray = currentCards.map((card) => {
       return (
-        <Button selectColor={card.selectColor} color={card.color} number={card.number} fill={card.fill} shape={card.shape} id={card.id} handlePress={this.handlePress}></Button>
+        <Button card={card} handlePress={this.handlePress}></Button>
       )
     });
     return (
@@ -119,7 +108,7 @@ class SetProject extends Component {
           <Text style={styles.welcome}>Submit Set</Text>
         </TouchableHighlight>
         <View style={styles.container}>
-          {cardsArr}
+          {cardsArray}
         </View>
       </View>
     );
