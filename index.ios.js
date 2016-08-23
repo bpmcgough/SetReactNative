@@ -15,6 +15,7 @@ import Cards from './theDirectory/allTheCards';
 let allTheCards = Cards.allTheCards;
 let selectedCards = [];
 let usedCards = [];
+let currentCards = [];
 
 generateCards = Helpers.generateCards;
 shuffle = Helpers.shuffle;
@@ -50,12 +51,6 @@ handleFoundSet = () => {
 
 generateCards();
 
-// this was the button previously
-// <Text
-// style={{color: this.props.card.selectColor, fontSize: 15}}>
-//   {this.props.card.number} {this.props.card.color} {this.props.card.fill} {this.props.card.shape}
-// </Text>
-
 class Button extends Component {
   constructor(props) {
     super(props);
@@ -66,12 +61,11 @@ class Button extends Component {
   }
 
   render() {
-    console.log('this.props.card: ', this.props.card)
     return (
       <TouchableHighlight style={styles.item} onPress={() => (this.props.handlePress.bind(this))(this.props.card)} underlayColor='white'>
         <Image
-          source={this.props.card.img}
-        /> // this shit is not working, need to manually require the mfer
+          source={this.props.card.img} resizeMode='center'
+        />
       </TouchableHighlight>
     );
   }
@@ -87,17 +81,12 @@ class SetProject extends Component {
       card.selectColor = 'red';
       selectedCards.push(card);
     } else {
-      // this.setState({color: 'green', backgroundColor: '#CCC'});
       card.selectColor = 'green'
       selectedCards = selectedCards.filter( el => el !== card);
     }
     if(selectedCards.length === 3 && Helpers.checkForSet(selectedCards)){
-      console.log('ayyyyy')
       handleFoundSet(selectedCards);
-      this.forceUpdate();
     }
-    this.forceUpdate();
-    console.log('selectedCards: ', selectedCards, Helpers.checkForSet(selectedCards))
   }
 
   doTheUpdate(){
@@ -105,6 +94,11 @@ class SetProject extends Component {
   }
 
   render() {
+    let cardsArray = currentCards.map((card) => {
+      return (
+        <Button card={card} handlePress={this.handlePress}></Button>
+      )
+    });
     return (
       <View style={styles.overarch}>
         <View style={styles.title}>
@@ -114,11 +108,7 @@ class SetProject extends Component {
           <Text style={styles.welcome}>Submit Set</Text>
         </TouchableHighlight>
         <View style={styles.container}>
-          {currentCards.map((card) => {
-            return (
-              <Button card={card} handlePress={this.handlePress}></Button>
-            )
-          })}
+          {cardsArray}
         </View>
       </View>
     );
