@@ -22,34 +22,6 @@ Helpers.shuffle = (array) => {
   return array;
 };
 
-// handleFoundSet should do several things:
-// - remove selectedCards objs from currentCards
-// - add selectedCards to usedCards
-// - empty selectedCards
-// - add three more cards to currentCards
-Helpers.handleFoundSet = () => {
-
-  currentCards = currentCards.filter(el => {
-    let shouldReturn = true;
-    selectedCards.forEach(card => {
-      if(card.id === el.id){
-        shouldReturn = false;
-      }
-    });
-    if(shouldReturn) return el;
-	});
-
-  currentCards = currentCards.map(card => card.color = 'green');
-
-  usedCards = usedCards.concat(selectedCards);
-
-  selectedCards = [];
-
-  for(let i = 0; i < 3; i++){
-    currentCards.push(todosLosCards.pop());
-  }
-};
-
 Helpers.checkForSet = (selectedCards) => {
   if(!checkShapes(selectedCards) || !checkColors(selectedCards) || !checkNumbers(selectedCards) || !checkFill(selectedCards)){
     return false;

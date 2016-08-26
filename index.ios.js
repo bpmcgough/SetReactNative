@@ -13,8 +13,10 @@ import Helpers from './theDirectory/helpers';
 import Cards from './theDirectory/allTheCards';
 
 let allTheCards = Cards;
+let selectedCards = [];
+let usedCards = [];
+let currentCards = [];
 
-generateCards = Helpers.generateCards;
 shuffle = Helpers.shuffle;
 checkForSet = Helpers.checkForSet;
 
@@ -27,7 +29,6 @@ generateCards = () => {
 };
 
 handleFoundSet = () => {
-  console.log('before currentCards: ', currentCards)
   currentCards = currentCards.filter(el => {
     let shouldReturn = true;
     selectedCards.forEach(card => {
@@ -37,8 +38,6 @@ handleFoundSet = () => {
     });
     if(shouldReturn) return el;
 	});
-
-  console.log('after currentCards: ', currentCards)
 
   usedCards = usedCards.concat(selectedCards);
 
@@ -55,19 +54,45 @@ class Button extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      color: 'green',
-      backgroundColor: '#CCC'
+      color: 'blue',
+      style: {
+       flex: 1,
+       justifyContent: 'center',
+       alignItems: 'center',
+       margin: 5,
+       width: 100,
+       height: 100,
+       borderWidth: 1,
+       backgroundColor: 'white'
+      },
     };
   }
 
+  handleChange() {
+    (this.props.handlePress.bind(this))(this.props.card);
+    let style = _.extend({}, this.state.style);
+    style.backgroundColor = (style.backgroundColor === 'white' ? '#CCC' : 'white');
+    this.setState({style});
+  }
+
   render() {
-    return (
-      <TouchableHighlight style={styles.item} onPress={() => (this.props.handlePress.bind(this))(this.props.card)}>
-        <Image
-          source={this.props.card.img} resizeMode='center' style={styles.image}
-        />
-      </TouchableHighlight>
-    );
+    if(this.props.card){
+      console.log('this.props.card: ', this.props.card)
+      return (
+        <TouchableHighlight style={this.state.style} onPress={this.handleChange.bind(this)}>
+          <Image
+            source={this.props.card.img} resizeMode='center' style={styles.image}
+          />
+        </TouchableHighlight>
+      );
+    } else {
+      return (
+        <TouchableHighlight style={this.state.style} onPress={this.handleChange.bind(this)}>
+          <Text>Empty</Text>
+        </TouchableHighlight>
+      )
+    }
+
   }
 }
 
@@ -104,9 +129,14 @@ class SetProject extends Component {
         <View style={styles.title}>
           <Text>Cards</Text>
         </View>
-        <TouchableHighlight onPress={this.doTheUpdate.bind(this)} style={styles.submit}>
-          <Text style={styles.welcome}>Submit Set</Text>
-        </TouchableHighlight>
+        <View>
+          <TouchableHighlight onPress={this.doTheUpdate.bind(this)} style={styles.submit}>
+            <Text style={styles.welcome}>Submit Set/Update</Text>
+          </TouchableHighlight>
+          <TouchableHighlight onPress={generateCards} style={styles.submit}>
+            <Text style={styles.welcome}>Generate Cards (then press update)</Text>
+          </TouchableHighlight>
+        </View>
         <View style={styles.container}>
           {cardsArray}
         </View>
@@ -123,7 +153,6 @@ const styles = StyleSheet.create({
   submit: {
     flex: .2,
     justifyContent: 'center',
-    marginBottom: 10
   },
   overarch: {
     flex: 1,
@@ -145,16 +174,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
-  },
-  item: {
-   flex: 1,
-   justifyContent: 'center',
-   alignItems: 'center',
-   margin: 10,
-   width: 100,
-   height: 100,
-   borderWidth: 1,
-   margin: 1
   },
   image: {
     width: 100,
