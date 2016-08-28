@@ -54,17 +54,16 @@ class Button extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      color: 'blue',
       style: {
        flex: 1,
        justifyContent: 'center',
        alignItems: 'center',
        margin: 5,
-       width: 100,
+       width: 90,
        height: 100,
        borderWidth: 1,
-       backgroundColor: 'white'
-      },
+       backgroundColor: this.props.card.selected ? '#CCC' : 'white'
+      }
     };
   }
 
@@ -77,7 +76,6 @@ class Button extends Component {
 
   render() {
     if(this.props.card){
-      console.log('this.props.card: ', this.props.card)
       return (
         <TouchableHighlight style={this.state.style} onPress={this.handleChange.bind(this)}>
           <Image
@@ -87,14 +85,15 @@ class Button extends Component {
       );
     } else {
       return (
-        <TouchableHighlight style={this.state.style} onPress={this.handleChange.bind(this)}>
-          <Text>Empty</Text>
+        <TouchableHighlight style={this.state.style}>
+          <Text>End of the deck!</Text>
         </TouchableHighlight>
       )
     }
-
   }
 }
+
+let cardsArray;
 
 class SetProject extends Component {
   constructor(props) {
@@ -111,35 +110,33 @@ class SetProject extends Component {
     }
     if(selectedCards.length === 3 && Helpers.checkForSet(selectedCards)){
       handleFoundSet(selectedCards);
+      this.forceUpdate();
     }
   }
 
-  doTheUpdate(){
-    this.forceUpdate()
+  generateCards(){
+    generateCards();
+    this.forceUpdate();
+  }
+
+  makeCardsArray(){
+    cardsArray = currentCards.map((card) => {
+      return (
+        <Button card={card} handlePress={this.handlePress.bind(this)} backgroundColor='white'></Button>
+      )
+    });
   }
 
   render() {
-    let cardsArray = currentCards.map((card) => {
-      return (
-        <Button card={card} handlePress={this.handlePress}></Button>
-      )
-    });
+    this.makeCardsArray();
     return (
       <View style={styles.overarch}>
-        <View style={styles.title}>
-          <Text>Cards</Text>
-        </View>
-        <View>
-          <TouchableHighlight onPress={this.doTheUpdate.bind(this)} style={styles.submit}>
-            <Text style={styles.welcome}>Submit Set/Update</Text>
-          </TouchableHighlight>
-          <TouchableHighlight onPress={generateCards} style={styles.submit}>
-            <Text style={styles.welcome}>Generate Cards (then press update)</Text>
-          </TouchableHighlight>
-        </View>
         <View style={styles.container}>
           {cardsArray}
         </View>
+        <TouchableHighlight onPress={this.generateCards.bind(this)} style={styles.submit}>
+          <Text style={styles.welcome}>Start Over</Text>
+        </TouchableHighlight>
       </View>
     );
   }
@@ -156,9 +153,10 @@ const styles = StyleSheet.create({
   },
   overarch: {
     flex: 1,
+    marginTop: 25,
+    marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
     flexWrap: 'wrap',
     flexDirection: 'column'
   },
@@ -166,9 +164,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
     flexWrap: 'wrap',
-    flexDirection: 'row'
+    flexDirection: 'column'
   },
   welcome: {
     fontSize: 20,
@@ -176,8 +173,8 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   image: {
-    width: 100,
-    height: 100
+    width: 50,
+    height: 70
   }
 });
 
