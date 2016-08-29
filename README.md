@@ -11,7 +11,7 @@ This app is not completed but is playable on your phone with the following cavea
 
 ## To play on device: ##
 - Open Xcode (https://developer.apple.com/xcode/downloads/, 4GB)
-- Open ios >> Setproject.xcodeproj
+- Open SetReactNative >> ios >> Setproject.xcodeproj
 - In Xcode
   - Plug phone into computer, make sure phone is selected
   - Press play button
