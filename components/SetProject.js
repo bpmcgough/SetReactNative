@@ -11,6 +11,7 @@ import {
 import _ from 'underscore';
 import Helpers from '../theDirectory/helpers';
 import Cards from '../theDirectory/allTheCards';
+import Button from './button'
 
 let allTheCards = Cards;
 let selectedCards = [];
@@ -50,51 +51,6 @@ handleFoundSet = () => {
 
 generateCards();
 
-class Button extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      color: 'blue',
-      style: {
-       flex: 1,
-       justifyContent: 'center',
-       alignItems: 'center',
-       margin: 5,
-       width: 100,
-       height: 100,
-       borderWidth: 1,
-       backgroundColor: 'white'
-      },
-    };
-  }
-
-  handleChange() {
-    (this.props.handlePress.bind(this))(this.props.card);
-    let style = _.extend({}, this.state.style);
-    style.backgroundColor = (style.backgroundColor === 'white' ? '#CCC' : 'white');
-    this.setState({style});
-  }
-
-  render() {
-    if(this.props.card){
-      console.log('this.props.card: ', this.props.card)
-      return (
-        <TouchableHighlight style={this.state.style} onPress={this.handleChange.bind(this)}>
-          <Image
-            source={this.props.card.img} resizeMode='center' style={styles.image}
-          />
-        </TouchableHighlight>
-      );
-    } else {
-      return (
-        <TouchableHighlight style={this.state.style} onPress={this.handleChange.bind(this)}>
-          <Text>Empty</Text>
-        </TouchableHighlight>
-      )
-    }
-
-  }
-}
 
 export default class SetProject extends Component {
   constructor(props) {
